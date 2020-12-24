@@ -25,21 +25,20 @@
 </div>
 <script>
     class Mobile {
-        constructor(draft,inbox,sent,message,battery) {
-            this._draft = draft;
+        constructor(inbox,sent,write,battery) {
             this._inbox = inbox;
             this._sent = sent;
-            this._message = message;
+            this._write = write;
             this._battery = battery;
             this._status = true;
         }
 
         get message() {
-            return this._message;
+            return this._write;
         }
 
         set message(value) {
-            this._message = value;
+            this._write = value;
         }
 
         get draft() {
@@ -82,29 +81,40 @@
             this._status = value;
         }
        sent(mobile) {
-            if (this._message == '') {
+            // Nếu tin nhắn là khoảng trống thì ko gửi được;
+            if (this._write == '') {
                 return ;
             }
-            this._sent.push(this._message);
-            this._draft.push(this._message);
-            mobile._inbox.push(this._message)
+           // Push tin soạn vào tin đã gửi;
+           this._sent.push(this._write);
+            // Push tin soạn vào hợp thư đến của Mobile muốn gửi;
+            mobile._inbox.push(this._write);
        }
     }
-    let iphone = new Mobile([],[],[],'',7);
-    let nokia = new Mobile([],[],[],'',10);
+    let iphone = new Mobile([],[],[],'',3);
+    let nokia = new Mobile([],[],[],'',3);
 
-    function sent(mobileSent,mobileNhan,idInbox,isSent) {
+    function sent(mobileGo,mobileCome,idInbox,isSent) {
+        // Khởi tạo biến nhận giá trị từ id DOM của ô soạn tin nhắn;
         let mes = document.getElementById(isSent).value;
-        document.getElementById(isSent).value = ''
-        mobileSent.message = mes;
-        mobileSent.sent(mobileNhan);
-        displayInbox(idInbox,mobileNhan);
+        // Trả lại mảng trống để nhập tin tiếp theo;
+        document.getElementById(isSent).value = '';
+        // Gán lại giá trị từ id DOM vào phần soạn tin nhắn của đt gừi;
+        mobileGo.write = mes
+        // Gọi phương thức gửi tin nhắn và truyền vào điện thoại muốn gửi;
+        mobileGo.sent(mobileCome);
+        // Gọi hàm hiển thị nội dung truyền vào id DOM của điện thoại muốn gửi;
+        displayInbox(idInbox,mobileCome);
     }
     function displayInbox(idInbox,mobile){
-        let phoneDOM = document.getElementById(idInbox);
-        phoneDOM.value = '';
-        for (let i = 0;i< mobile.inbox.length;i++){
-            phoneDOM.value += mobile.inbox[i] + "\n";
+        // Tạo biến chứa nội dung trên id DOM của điện thoại nhận tin;
+        let content = document.getElementById(idInbox);
+        // Trả lại nội dung trống để lưu tin tiếp theo;
+        content.value = '';
+        // Dùng lặp để nhận và hiển thị từng tin nhắn được nhận;
+        for (let i = 0;i < mobile.inbox.length; i++){
+            // Nội dung khi nhận vào hộp thư cộng với br, vòng lặp tiếp theo là 1 tin nhắn mới;
+            content.value += mobile.inbox[i] + "\n";
         }
     }
 
