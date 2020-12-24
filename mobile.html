@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <p>APPLE</p>
+    <input type="button" class="on" value="on">
+    <input type="button" class="off" value="off">
+    <input type="button" id="bat" value="100">
+    <input type="button" id="send" value="send" onclick="sent(iphone,nokia,'nInbox','iSend')">
+    <textarea name="iphone" id="iSend" cols="30" rows="10"></textarea>
+    <textarea name="iphone" id="iInbox" cols="30" rows="10"></textarea>
+</div>
+<div>
+    <p>NOKIA</p>
+    <input type="button" class="on" value="on">
+    <input type="button" class="off" value="off">
+    <input type="button" id="bat2" value="100">
+    <input type="button" id="inbox" value="send" onclick="sent(nokia,iphone,'iInbox','nSend')">
+    <textarea name="nokia" id="nSend" cols="30" rows="10"></textarea>
+    <textarea name="nokia" id="nInbox" cols="30" rows="10"></textarea>
+</div>
+<script>
+    class Mobile {
+        constructor(draft,inbox,sent,message,battery) {
+            this._draft = draft;
+            this._inbox = inbox;
+            this._sent = sent;
+            this._message = message;
+            this._battery = battery;
+            this._status = true;
+        }
+
+        get message() {
+            return this._message;
+        }
+
+        set message(value) {
+            this._message = value;
+        }
+
+        get draft() {
+            return this._draft;
+        }
+
+        set draft(value) {
+            this._draft = value;
+        }
+
+        get inbox() {
+            return this._inbox;
+        }
+
+        set inbox(value) {
+            this._inbox = value;
+        }
+
+        get sent() {
+            return this._sent;
+        }
+
+        set sent(value) {
+            this._sent = value;
+        }
+
+        get battery() {
+            return this._battery;
+        }
+
+        set battery(value) {
+            this._battery = value;
+        }
+
+        get status() {
+            return this._status;
+        }
+
+        set status(value) {
+            this._status = value;
+        }
+       sent(mobile) {
+            if (this._message == '') {
+                return ;
+            }
+            this._sent.push(this._message);
+            this._draft.push(this._message);
+            mobile._inbox.push(this._message)
+       }
+    }
+    let iphone = new Mobile([],[],[],'',7);
+    let nokia = new Mobile([],[],[],'',10);
+
+    function sent(mobileSent,mobileNhan,idInbox,isSent) {
+        let mes = document.getElementById(isSent).value;
+        document.getElementById(isSent).value = ''
+        mobileSent.message = mes;
+        mobileSent.sent(mobileNhan);
+        displayInbox(idInbox,mobileNhan);
+    }
+    function displayInbox(idInbox,mobile){
+        let phoneDOM = document.getElementById(idInbox);
+        phoneDOM.value = '';
+        for (let i = 0;i< mobile.inbox.length;i++){
+            phoneDOM.value += mobile.inbox[i] + "\n";
+        }
+    }
+
+</script>
+</body>
+</html>
